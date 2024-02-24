@@ -17,6 +17,7 @@ CREATE TABLE journal_entries (
   user_id INT NOT NULL,
   content TEXT NOT NULL CHECK (char_length(content) <= 500),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 

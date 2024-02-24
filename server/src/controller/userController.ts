@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import { query as db } from '../db';
-import { checkIfExists } from '../db/dbHelpers';
+import { checkIfUserExists } from '../db/dbHelpers';
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const users = await db.query('SELECT * FROM users');
+  const users = await db.query('SELECT email, username FROM users');
 
   if (users.rowCount === 0) {
     return res.status(200).json({
@@ -24,7 +24,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const createNewUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
-  const emailExists = await checkIfExists('email', email);
+  const emailExists = await checkIfUserExists('email', email);
 
   if (emailExists) {
     return res.status(409).json({
@@ -33,7 +33,7 @@ export const createNewUser = async (req: Request, res: Response) => {
     });
   }
 
-  const usernameExists = await checkIfExists('username', username);
+  const usernameExists = await checkIfUserExists('username', username);
 
   if (usernameExists) {
     return res.status(409).json({
@@ -72,7 +72,7 @@ export const createNewUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   const { email } = req.body;
 
-  const userExists = await checkIfExists('email', email);
+  const userExists = await checkIfUserExists('email', email);
 
   if (!userExists) {
     return res.status(404).json({

@@ -3,12 +3,12 @@ import 'express-async-errors';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import router from './routes/root';
 import helmet from 'helmet';
 import { logger } from './middleware/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { corsOptions } from './config/corsOptions';
 import userRoutes from './routes/userRoutes';
+import journalRoutes from './routes/journalRoutes';
 
 dotenv.config();
 
@@ -28,8 +28,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(router);
 app.use('/users', userRoutes);
+app.use('/journals', journalRoutes);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
