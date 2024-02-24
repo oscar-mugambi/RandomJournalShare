@@ -35,9 +35,9 @@ app.all('*', (req: Request, res: Response) => {
   res.status(404);
 
   if (req.accepts('json')) {
-    res.json({ error: '404 Not Found' });
+    res.json({ message: '404 Route Not Found' });
   } else {
-    res.type('txt').send('404 Not Found');
+    res.type('txt').send('404 Route Not Found');
   }
 });
 

@@ -3,7 +3,7 @@ import bcryptjs from 'bcryptjs';
 import { query as db } from '../db';
 import { checkIfUserExists } from '../db/dbHelpers';
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (_req: Request, res: Response) => {
   const users = await db.query('SELECT email, username FROM users');
 
   if (users.rowCount === 0) {
@@ -19,6 +19,10 @@ export const getAllUsers = async (req: Request, res: Response) => {
     data: users.rows,
     message: 'Users retrieved successfully',
   });
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
 };
 
 export const createNewUser = async (req: Request, res: Response) => {

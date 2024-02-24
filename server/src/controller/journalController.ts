@@ -22,7 +22,7 @@ export const getAllJournals = async (req: Request, res: Response) => {
 };
 
 export const createJournal = async (req: Request, res: Response) => {
-  const { user_id, content } = req.body;
+  const { user_id, content, title, mood, tags, daily_highlight } = req.body;
 
   const userExists = await checkIfUserExists('user_id', user_id);
 
@@ -34,10 +34,13 @@ export const createJournal = async (req: Request, res: Response) => {
   }
 
   const journal = await db.query(
-    'INSERT INTO journal_entries (user_id, content) VALUES ($1, $2) RETURNING *',
-    [user_id, content]
+    `INSERT INTO journal_entries (user_id, title, content, mood, tags, daily_highlight, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+     RETURNING *`,
+    [user_id, title, content, mood, JSON.stringify(tags), daily_highlight]
   );
 
+  // Check if the journal entry was created successfully
   if (journal) {
     res.status(201).json({
       success: true,
