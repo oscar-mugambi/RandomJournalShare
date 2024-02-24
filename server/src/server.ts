@@ -3,11 +3,12 @@ import 'express-async-errors';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import router from '../routes/root';
+import router from './routes/root';
 import helmet from 'helmet';
-import { logger } from '../middleware/logger';
-import { errorHandler } from '../middleware/errorHandler';
-import { corsOptions } from '../config/corsOptions';
+import { logger } from './middleware/logger';
+import { errorHandler } from './middleware/errorHandler';
+import { corsOptions } from './config/corsOptions';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 
@@ -28,10 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
-
-app.get('/journals', async (req, res) => {
-  throw new Error('Test Error'); // This error will be caught automatically
-});
+app.use('/users', userRoutes);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);

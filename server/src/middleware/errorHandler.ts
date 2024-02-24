@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { logActivity } from './logger';
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log('was here');
   logActivity(
     `${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`,
     'errLog.log'
@@ -12,5 +11,5 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
 
   res.status(status);
 
-  res.json({ message: err.message });
+  res.json({ success: false, message: err.message });
 };
