@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import 'express-async-errors';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -27,6 +28,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
+
+app.get('/journals', async (req, res) => {
+  throw new Error('Test Error'); // This error will be caught automatically
+});
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
