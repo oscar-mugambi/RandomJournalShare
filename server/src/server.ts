@@ -9,6 +9,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { corsOptions } from './config/corsOptions';
 import userRoutes from './routes/userRoutes';
 import journalRoutes from './routes/journalRoutes';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/journals', journalRoutes);
 
