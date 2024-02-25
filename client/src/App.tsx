@@ -5,14 +5,15 @@ import PublicLayout from '@/components/PublicLayout';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import Welcome from '@/pages/Welcome';
 import JournalList from '@/pages/JournalList';
-import Layout from './components/Layout';
+import Layout from '@/components/Layout';
+import JournalEntry from '@/pages/JournalEntry';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path='/auth'>
+        <Route path='auth'>
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
         </Route>
@@ -20,6 +21,7 @@ function App() {
       <Route path='/home' element={<Layout />}>
         <Route index element={<Welcome />} />
         <Route path='journals' element={<JournalList />} />
+        <Route path='journals/new' element={<JournalEntry />} />
       </Route>
     </Routes>
   );

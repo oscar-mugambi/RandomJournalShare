@@ -1,5 +1,6 @@
 import { JournalResponse } from '@/types';
 import { customFetch } from './customFetch';
+import { JournalEntryMutationVariables } from '@/schemas/journalSchema';
 
 export const fetchJournals = async (token: string): Promise<JournalResponse> => {
   try {
@@ -37,4 +38,20 @@ export const deleteJournal = async (url: string, journalId: number): Promise<voi
     }
     throw new Error(errorMessage);
   }
+};
+
+export const createJournalEntry = async ({
+  url,
+  token,
+  data,
+  user_id,
+}: JournalEntryMutationVariables) => {
+  return customFetch(
+    url,
+    {
+      method: 'POST',
+      body: JSON.stringify({ ...data, user_id }),
+    },
+    token
+  );
 };

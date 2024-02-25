@@ -15,13 +15,13 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
             <div className='hidden md:block'>
               <div className='ml-10 flex items-baseline space-x-4'>
                 <Link
-                  to='/new-entry'
+                  to='/home/journals/new'
                   className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
                 >
                   New Entry
                 </Link>
                 <Link
-                  to='/my-entries'
+                  to='/home'
                   className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
                 >
                   My Entries
@@ -37,7 +37,7 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
           </div>
           <div className='flex items-center'>
             <Link
-              to='/settings'
+              to='/home'
               className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
             >
               Account Settings
