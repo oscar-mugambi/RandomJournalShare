@@ -1,18 +1,22 @@
-import { JournalEntry } from '@/types';
+import { JournalResponse } from '@/types';
+import { customFetch } from './customFetch';
 
-export const fetchJournals = async (): Promise<JournalEntry[]> => {
-  const response = await fetch('http://localhost:5000/journals');
-  if (!response.ok) {
-    let errorMessage = 'Error fetching journals';
-    try {
-      const errorBody = await response.json();
-      errorMessage = errorBody.error || errorBody.message || errorMessage;
-    } catch (error) {
-      console.error('Error parsing JSON response:', error);
-    }
-    throw new Error(errorMessage);
+export const fetchJournals = async (token: string): Promise<JournalResponse> => {
+  try {
+    const response = await customFetch(
+      '/journals',
+      {
+        method: 'GET',
+      },
+      token
+    );
+
+    const results = response.json();
+    return results;
+  } catch (error) {
+    console.error('Error fetching journals:', error);
+    throw new Error(typeof error === 'string' ? error : 'Error fetching journals');
   }
-  return response.json();
 };
 
 export const deleteJournal = async (url: string, journalId: number): Promise<void> => {

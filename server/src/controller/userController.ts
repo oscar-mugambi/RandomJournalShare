@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import { query as db } from '../db';
 import { checkIfUserExists } from '../db/dbHelpers';
+import jwt from 'jsonwebtoken';
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   const users = await db.query('SELECT email, username FROM users');
@@ -19,10 +20,6 @@ export const getAllUsers = async (_req: Request, res: Response) => {
     data: users.rows,
     message: 'Users retrieved successfully',
   });
-};
-
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
 };
 
 export const createNewUser = async (req: Request, res: Response) => {
@@ -59,18 +56,49 @@ export const createNewUser = async (req: Request, res: Response) => {
     [userObject.username, userObject.email, userObject.password]
   );
 
-  if (user) {
-    res.status(201).json({
-      success: true,
-      data: user.rows[0],
-      message: 'User created successfully',
-    });
-  } else {
-    res.status(500).json({
+  if (user.rowCount === 0) {
+    return res.status(500).json({
       success: false,
       message: 'An error occurred while creating the user',
     });
   }
+
+  delete user.rows[0].password;
+
+  const accessToken = jwt.sign(
+    {
+      user_id: user.rows[0].user_id,
+      username: user.rows[0].username,
+      email: user.rows[0].email,
+    },
+    process.env.ACCESS_TOKEN_SECRET as string,
+    {
+      expiresIn: '30m',
+    }
+  );
+
+  const refreshToken = jwt.sign(
+    {
+      email: user.rows[0].email,
+    },
+    process.env.REFRESH_TOKEN_SECRET as string,
+    {
+      expiresIn: '1d',
+    }
+  );
+  res.cookie('jwt', refreshToken, {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+
+  res.status(201).json({
+    success: true,
+    data: user.rows[0],
+    message: 'User created successfully',
+    accessToken,
+  });
 };
 
 export const deleteUser = async (req: Request, res: Response) => {

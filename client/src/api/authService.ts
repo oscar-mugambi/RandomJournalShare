@@ -1,24 +1,50 @@
-export async function loginUser(url: string, requestBody: { email: string; password: string }) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  });
+import { customFetch } from '@/api/customFetch';
 
-  if (!response.ok) {
-    let errorMessage = 'Network response was not ok';
-    try {
-      const errorBody = await response.json();
-      errorMessage = errorBody.error || errorBody.message || errorMessage;
-    } catch (error) {
-      console.error('Error parsing JSON response:', error);
+export async function loginUser(
+  endpoint: string,
+  requestBody: { email: string; password: string }
+) {
+  try {
+    const response = await customFetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to login');
     }
-    throw new Error(errorMessage);
-  }
 
-  return response.json();
+    return response.json();
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
+}
+
+export async function logoutUser(endpoint: string, user_id: number, token?: string) {
+  try {
+    const response = await customFetch(
+      endpoint,
+      {
+        method: 'POST',
+        body: JSON.stringify({ user_id }),
+      },
+      token
+    );
+
+    // check if there is a response // temp hack to fix bug
+    const text = await response.text();
+    let data;
+    if (text) {
+      data = JSON.parse(text);
+      console.log(data);
+    }
+
+    return data || {};
+  } catch (error) {
+    console.error('Logout error:', error);
+    throw error;
+  }
 }
 
 export async function registerUser(

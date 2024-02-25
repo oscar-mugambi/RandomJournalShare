@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
 
 import { LoginSchema } from '@/schemas';
 import { Input } from '@/components/ui/input';
@@ -16,26 +16,47 @@ import {
 import CardWrapper from '@/components/auth/card-wrapper';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/auth/form-error';
-import { FormSuccess } from '@/components/auth/form-success';
 import { useLogin } from '@/hooks/useLogin';
+import { setToken } from '@/redux/authSlice';
+import { setUser } from '@/redux/userSlice';
+import { useAppDispatch } from '@/app/store';
 
 export const LoginForm = () => {
-  const [success, setSuccess] = useState<string | undefined>('');
-  const { mutate: performLogin, isPending: isLoginInProgress, error: loginError } = useLogin();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const {
+    mutate: performLogin,
+    data: userInfo,
+    isPending: isLoginInProgress,
+    isSuccess: isLoginSuccess,
+    error: loginError,
+  } = useLogin();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'imperator.furiosa@mail.com',
+      password: '11111',
     },
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    const url = 'http://localhost:5000/user/login';
+    const url = '/auth/login';
 
-    performLogin({ url, requestBody: { email: values.email, password: values.password } });
+    performLogin({
+      url,
+      requestBody: { email: values.email, password: values.password },
+    });
   };
+
+  if (isLoginSuccess) {
+    dispatch(setToken(userInfo.accessToken));
+    dispatch(setUser(userInfo.data));
+
+    setTimeout(() => {
+      navigate('/home/');
+    }, 500);
+  }
 
   return (
     <CardWrapper
@@ -87,7 +108,6 @@ export const LoginForm = () => {
             />
           </fieldset>
           <FormError message={loginError?.message} />
-          <FormSuccess message={success} />
           <Button disabled={isLoginInProgress} type='submit' className='w-full'>
             Sign In
           </Button>

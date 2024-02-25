@@ -4,7 +4,7 @@ import { query as db } from '../db';
 import { checkIfJournalExists, checkIfUserExists } from '../db/dbHelpers';
 
 export const getAllJournals = async (req: Request, res: Response) => {
-  const journals = await db.query('SELECT content, created_at, updated_at FROM journal_entries');
+  const journals = await db.query('SELECT * FROM journal_entries');
 
   if (journals.rowCount === 0) {
     return res.status(200).json({
@@ -40,8 +40,14 @@ export const createJournal = async (req: Request, res: Response) => {
     [user_id, title, content, mood, JSON.stringify(tags), daily_highlight]
   );
 
-  // Check if the journal entry was created successfully
-  if (journal) {
+  if (!journal) {
+    return res.status(500).json({
+      success: false,
+      message: 'An error occurred while creating your journal',
+    });
+  }
+
+  if (journal.rowCount && journal.rowCount > 0) {
     res.status(201).json({
       success: true,
       data: journal.rows[0],

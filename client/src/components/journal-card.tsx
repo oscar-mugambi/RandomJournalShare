@@ -22,7 +22,7 @@ const JournalCard = ({ journal }: { journal: JournalEntry }) => {
           <CardContent className='p-0 mt-2 line-clamp-1'>{journal.content}</CardContent>
 
           <CardFooter className='p-0 space-x-6 mt-4'>
-            <Button onClick={() => navigate(`${journal.entry_id}`)} variant={'default'}>
+            <Button onClick={() => navigate(`/journal/${journal.entry_id}`)} variant={'default'}>
               View Entry
             </Button>
             <Button onClick={() => {}} variant={'destructive'}>

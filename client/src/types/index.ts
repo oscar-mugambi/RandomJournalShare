@@ -9,3 +9,9 @@ export interface JournalEntry {
   created_at: string;
   updated_at: string;
 }
+
+export type JournalResponse = {
+  success: boolean;
+  data: JournalEntry[];
+  message: string;
+};

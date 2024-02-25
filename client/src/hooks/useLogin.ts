@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { loginUser } from '@/api/authService';
+import { loginUser, registerUser, logoutUser } from '@/api/authService';
 
 interface LoginRequestBody {
   email: string;
@@ -19,12 +19,29 @@ interface RegistrationMutationVariables {
   url: string;
   requestBody: RegisterRequestBody;
 }
+interface LogoutMutationVariables {
+  url: string;
+  user_id: number;
+  token: string;
+}
 
 export function useLogin(): UseMutationResult<any, Error, LoginMutationVariables> {
   return useMutation({
     mutationFn: ({ url, requestBody }: LoginMutationVariables) => loginUser(url, requestBody),
     onSuccess: (data) => {
-      console.log('Login successful:', data);
+      console.log(data);
+    },
+    onError: (error: Error) => {
+      console.error('Login failed:', error);
+    },
+  });
+}
+export function useLogout(): UseMutationResult<any, Error, LogoutMutationVariables> {
+  return useMutation({
+    mutationFn: ({ url, user_id, token }: LogoutMutationVariables) =>
+      logoutUser(url, user_id, token),
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error: Error) => {
       console.error('Login failed:', error);
@@ -34,7 +51,7 @@ export function useLogin(): UseMutationResult<any, Error, LoginMutationVariables
 export function useRegistration(): UseMutationResult<any, Error, RegistrationMutationVariables> {
   return useMutation({
     mutationFn: ({ url, requestBody }: RegistrationMutationVariables) =>
-      loginUser(url, requestBody),
+      registerUser(url, requestBody),
     onSuccess: (data) => {
       console.log('Login successful:', data);
     },

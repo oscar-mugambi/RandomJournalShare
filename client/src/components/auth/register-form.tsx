@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAppDispatch } from '@/app/store';
 
 import { RegisterSchema } from '@/schemas';
 import { Input } from '@/components/ui/input';
@@ -16,12 +16,22 @@ import {
 import CardWrapper from '@/components/auth/card-wrapper';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/auth/form-error';
-import { FormSuccess } from '@/components/auth/form-success';
-import { useLogin } from '@/hooks/useLogin';
+import { useRegistration } from '@/hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
+import { setToken } from '@/redux/authSlice';
+import { setUser } from '@/redux/userSlice';
 
 export const RegisterForm = () => {
-  const [success, setSuccess] = useState<string | undefined>('');
-  const { mutate: performLogin, isPending: isLoginInProgress, error: loginError } = useLogin();
+  const {
+    mutate: performRegister,
+    data: userInfo,
+    isPending: isRegistering,
+    isSuccess: isRegisterSuccess,
+    error: registerError,
+  } = useRegistration();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -32,10 +42,22 @@ export const RegisterForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    const url = 'http://localhost:5000/user/login';
+    const url = 'http://localhost:5000/auth/register';
 
-    performLogin({ url, requestBody: { email: values.email, password: values.password } });
+    performRegister({
+      url,
+      requestBody: { username: values.username, email: values.email, password: values.password },
+    });
   };
+
+  if (isRegisterSuccess) {
+    dispatch(setToken(userInfo.accessToken));
+    dispatch(setUser(userInfo.data));
+
+    setTimeout(() => {
+      navigate('/home/');
+    }, 500);
+  }
 
   return (
     <CardWrapper
@@ -99,10 +121,9 @@ export const RegisterForm = () => {
               )}
             />
           </fieldset>
-          <FormError message={loginError?.message} />
-          <FormSuccess message={success} />
-          <Button disabled={isLoginInProgress} type='submit' className='w-full'>
-            Sign In
+          <FormError message={registerError?.message} />
+          <Button disabled={isRegistering} type='submit' className='w-full'>
+            Register
           </Button>
         </form>
       </Form>

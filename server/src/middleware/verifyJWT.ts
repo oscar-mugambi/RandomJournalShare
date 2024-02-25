@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { CustomJwtPayload } from '../types/cutsom-jwt-type';
+import { CustomJwtPayload } from '../types/custom-jwt-type';
 import { RequestWithUser } from '../types';
 
 dotenv.config();
