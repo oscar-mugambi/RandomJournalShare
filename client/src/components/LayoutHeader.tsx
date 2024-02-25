@@ -7,7 +7,7 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
         <div className='flex items-center justify-between h-16'>
           <div className='flex items-center'>
             <Link
-              to='/home'
+              to='/home/journals/random'
               className='text-2xl font-bold text-white hover:text-gray-300 transition duration-150 ease-in-out'
             >
               Random Journal
@@ -27,7 +27,7 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
                   My Entries
                 </Link>
                 <Link
-                  to='/random-entry'
+                  to='/home/journal/random-entry'
                   className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
                 >
                   Random Entry
@@ -36,12 +36,6 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
             </div>
           </div>
           <div className='flex items-center'>
-            <Link
-              to='/home'
-              className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
-            >
-              Account Settings
-            </Link>
             <button
               onClick={handleLogout}
               className='ml-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:border-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out'

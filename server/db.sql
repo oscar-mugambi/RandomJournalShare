@@ -34,6 +34,9 @@ CREATE TABLE shared_journal_entries (
   sender_entry_id INT NOT NULL,
   receiver_user_id INT NOT NULL,
   shared_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  delivery_status VARCHAR(255) NOT NULL DEFAULT 'pending'
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  CHECK (delivery_status IN ('pending', 'success', 'failed')),
   FOREIGN KEY (sender_entry_id) REFERENCES journal_entries(entry_id) ON DELETE CASCADE,
   FOREIGN KEY (receiver_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

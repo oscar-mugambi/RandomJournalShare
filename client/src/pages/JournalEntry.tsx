@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import TipTap from '@/components/TipTap';
 import { useAppSelector } from '@/app/store';
 import { useCreateJournalEntry } from '@/hooks/useLogJournal';
+import { useNavigate } from 'react-router-dom';
 
 const JournalEntry = () => {
   const userId = useAppSelector((state) => state.user.user?.user_id);
   const token = useAppSelector((state) => state.auth.token);
-  const { mutate: createEntry, isPending, isError } = useCreateJournalEntry();
+  const navigate = useNavigate();
+  const { mutate: createEntry, isPending, isError, isSuccess } = useCreateJournalEntry();
 
   const form = useForm<JournalEntryT>({
     resolver: zodResolver(journalEntrySchema),
@@ -23,12 +25,14 @@ const JournalEntry = () => {
     },
   });
 
+  if (isSuccess) {
+    navigate('/home');
+  }
+
   if (isPending) {
     /**
      * TODO handle loading
      */
-
-    console.log('is loading');
   }
 
   if (isError) {
@@ -44,15 +48,6 @@ const JournalEntry = () => {
       return;
     }
 
-    let tagsArray: string[] = [];
-
-    if (data.tags) {
-      tagsArray = data.tags
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
-    }
-
     createEntry({
       url: '/journals',
       token,
@@ -62,9 +57,12 @@ const JournalEntry = () => {
   }
 
   return (
-    <main className='p-24'>
+    <main className='h-full flex flex-col justify-center bg-slate-200'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='flex flex-col justify-center w-1/2 mx-auto gap-3 border-2 border-gray-200 p-10 rounded-lg bg-gray-50 relative top-[-40px]'
+        >
           <FormField
             control={form.control}
             name='title'
@@ -113,7 +111,9 @@ const JournalEntry = () => {
               </FormItem>
             )}
           />
-          <Button type='submit'>Submit</Button>
+          <Button className='w-fit' type='submit'>
+            Submit
+          </Button>
         </form>
       </Form>
     </main>

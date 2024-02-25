@@ -102,7 +102,6 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const passwordMatch = await bcryptjs.compare(password, user.rows[0].password);
-  console.log(user.rows[0]);
   if (!passwordMatch) {
     return res.status(401).json({
       success: false,
@@ -172,7 +171,6 @@ export const refresh = async (req: Request, res: Response) => {
         });
       }
 
-      console.log({ decoded });
       const decodedPayload = decoded as CustomJwtPayload;
       const user = await db.query('SELECT user_id, username, email FROM users WHERE email = $1', [
         decodedPayload.email,

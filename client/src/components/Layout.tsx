@@ -14,10 +14,9 @@ const Layout = () => {
   const { mutate: performLogout, isSuccess, error } = useLogout();
 
   const handleLogout = async () => {
-    console.log({ userId, token });
     if (!userId || !token) {
       console.log('User ID not found');
-      navigate('/');
+      navigate('/auth/login');
       return;
     }
 
@@ -31,10 +30,6 @@ const Layout = () => {
   if (isSuccess) {
     dispatch(logout());
     dispatch(deleteUser());
-
-    setTimeout(() => {
-      navigate('/');
-    }, 500);
   }
 
   if (error) {
@@ -44,7 +39,7 @@ const Layout = () => {
   return (
     <>
       <LayoutHeader handleLogout={handleLogout} />
-      <div>
+      <div className='h-full'>
         <Outlet />
       </div>
     </>

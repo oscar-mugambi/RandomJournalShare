@@ -5,7 +5,7 @@ export const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex flex-col justify-center items-center h-screen bg-someColorOrGradient'>
+    <div className='flex flex-col justify-center items-center h-screen'>
       <h1 className='text-6xl font-semibold text-white drop-shadow-md text-center'>
         Welcome to Random Journal
       </h1>

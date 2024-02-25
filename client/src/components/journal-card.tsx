@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -10,22 +10,51 @@ import {
 
 import { JournalEntry } from '@/types';
 import { Button } from './ui/button';
+import { useAppSelector } from '@/app/store';
+import { useDeleteJournal } from '@/hooks/useDeleteJournal';
+import { formatter } from '@/lib/utils';
 
 const JournalCard = ({ journal }: { journal: JournalEntry }) => {
   const navigate = useNavigate();
+  const token = useAppSelector((state) => state.auth?.token);
+
+  const { mutate: deleteJournal, isError, isSuccess } = useDeleteJournal();
+
+  const url = '/journals';
+
+  const handleDeleteJournal = (journalId: number) => {
+    deleteJournal({ url, journalId, token });
+  };
+
+  if (isSuccess) {
+    /**
+     * TODO handle success
+     */
+  }
+
+  if (isError) {
+    /**
+     * TODO handle error
+     */
+  }
+
   return (
-    <Card className='flex flex-col justify-between w-10/12 min-w-80'>
+    <Card>
       <CardHeader className='flex-row gap-4 items-center'>
         <div>
           <CardTitle className='mb-1'>{journal.title}</CardTitle>
-          <CardDescription>{journal.created_at}</CardDescription>
-          <CardContent className='p-0 mt-2 line-clamp-1'>{journal.content}</CardContent>
-
+          <CardDescription>{formatter.format(new Date(journal.created_at))}</CardDescription>
+          <CardContent className='p-0 mt-2 line-clamp-1'>
+            <div dangerouslySetInnerHTML={{ __html: journal.content }}></div>
+          </CardContent>
           <CardFooter className='p-0 space-x-6 mt-4'>
-            <Button onClick={() => navigate(`/journal/${journal.entry_id}`)} variant={'default'}>
+            <Button
+              onClick={() => navigate(`/home/journal/${journal.entry_id}`)}
+              variant={'default'}
+            >
               View Entry
             </Button>
-            <Button onClick={() => {}} variant={'destructive'}>
+            <Button onClick={() => handleDeleteJournal(journal.entry_id)} variant={'destructive'}>
               Delete Entry
             </Button>
           </CardFooter>

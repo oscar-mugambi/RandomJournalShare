@@ -8,6 +8,12 @@ export const createJournalSchema = z.object({
 
 export const deleteJournalSChema = z.object({
   body: z.object({
-    user_id: z.number(),
+    entry_id: z.number(),
+  }),
+});
+
+export const getJournalSchema = z.object({
+  params: z.object({
+    entry_id: z.string(),
   }),
 });

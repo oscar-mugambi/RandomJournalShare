@@ -20,23 +20,34 @@ export const fetchJournals = async (token: string): Promise<JournalResponse> => 
   }
 };
 
-export const deleteJournal = async (url: string, journalId: number): Promise<void> => {
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ entry_id: journalId }),
-  });
-  if (!response.ok) {
-    let errorMessage = 'Error deleting journal';
-    try {
-      const errorBody = await response.json();
-      errorMessage = errorBody.error || errorBody.message || errorMessage;
-    } catch (error) {
-      console.error('Error parsing JSON response:', error);
+export const deleteJournal = async (
+  url: string,
+  journalId: number,
+  token: string
+): Promise<void> => {
+  try {
+    const response = await customFetch(
+      url,
+      {
+        method: 'DELETE',
+        body: JSON.stringify({ entry_id: journalId }),
+      },
+      token
+    );
+
+    if (!response.ok) {
+      let errorMessage = 'Error deleting journal';
+      try {
+        const errorBody = await response.json();
+        errorMessage = errorBody.error || errorBody.message || errorMessage;
+      } catch (error) {
+        console.error('Error parsing JSON response:', error);
+      }
+      throw new Error(errorMessage);
     }
-    throw new Error(errorMessage);
+  } catch (error) {
+    console.error('Deletion failed:', error);
+    throw error;
   }
 };
 
