@@ -4,7 +4,7 @@ interface CustomFetchOptions {
   body?: string;
   credentials?: 'include' | 'omit' | 'same-origin';
 }
-const BASE_URL = process.env.NODE_ENV === 'production' ? 'api' : 'http://localhost:5000/api';
+const BASE_URL = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api';
 
 async function refreshToken() {
   const response = await fetch(`${BASE_URL}/auth/refresh`, {
