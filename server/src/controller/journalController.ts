@@ -136,7 +136,6 @@ export const createJournal = async (req: Request, res: Response) => {
 
 export const deleteJournalEntry = async (req: Request, res: Response) => {
   const { entry_id } = req.body;
-  console.log(entry_id);
 
   const journalExists = await checkIfJournalExists('entry_id', entry_id);
 

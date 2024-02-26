@@ -3,11 +3,12 @@ import bcryptjs from 'bcryptjs';
 import { query as db } from '../db';
 import { checkIfUserExists } from '../db/dbHelpers';
 import jwt from 'jsonwebtoken';
+import { CreateNewUser, GetAllUserDataType } from '../types/db';
 
 export const getAllUsers = async (_req: Request, res: Response) => {
-  const users = await db.query('SELECT email, username FROM users');
+  const { rows } = await db.query<GetAllUserDataType>('SELECT email, username FROM users');
 
-  if (users.rowCount === 0) {
+  if (rows.length === 0) {
     return res.status(200).json({
       success: true,
       data: [],
@@ -17,7 +18,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    data: users.rows,
+    data: rows,
     message: 'Users retrieved successfully',
   });
 };
@@ -51,25 +52,24 @@ export const createNewUser = async (req: Request, res: Response) => {
     password: hashedPassword,
   };
 
-  const user = await db.query(
+  const { rows } = await db.query<CreateNewUser>(
     'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
     [userObject.username, userObject.email, userObject.password]
   );
 
-  if (user.rowCount === 0) {
+  if (rows.length === 0) {
     return res.status(500).json({
       success: false,
       message: 'An error occurred while creating the user',
     });
   }
-
-  delete user.rows[0].password;
+  delete rows[0].password;
 
   const accessToken = jwt.sign(
     {
-      user_id: user.rows[0].user_id,
-      username: user.rows[0].username,
-      email: user.rows[0].email,
+      user_id: rows[0].user_id,
+      username: rows[0].username,
+      email: rows[0].email,
     },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
@@ -79,7 +79,7 @@ export const createNewUser = async (req: Request, res: Response) => {
 
   const refreshToken = jwt.sign(
     {
-      email: user.rows[0].email,
+      email: rows[0].email,
     },
     process.env.REFRESH_TOKEN_SECRET as string,
     {
@@ -95,7 +95,7 @@ export const createNewUser = async (req: Request, res: Response) => {
 
   res.status(201).json({
     success: true,
-    data: user.rows[0],
+    data: rows[0],
     message: 'User created successfully',
     accessToken,
   });

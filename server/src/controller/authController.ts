@@ -117,7 +117,7 @@ export const login = async (req: Request, res: Response) => {
     },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: '30m',
+      expiresIn: '50m',
     }
   );
 
@@ -191,7 +191,7 @@ export const refresh = async (req: Request, res: Response) => {
         },
         process.env.ACCESS_TOKEN_SECRET as string,
         {
-          expiresIn: '15m',
+          expiresIn: '50m',
         }
       );
 
