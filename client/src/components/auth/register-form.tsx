@@ -20,6 +20,7 @@ import { useRegistration } from '@/hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '@/redux/authSlice';
 import { setUser } from '@/redux/userSlice';
+import { BeatLoader } from 'react-spinners';
 
 export const RegisterForm = () => {
   const {
@@ -123,7 +124,7 @@ export const RegisterForm = () => {
           </fieldset>
           <FormError message={registerError?.message} />
           <Button disabled={isRegistering} type='submit' className='w-full'>
-            Register
+            {isRegistering ? <BeatLoader size={8} color='#ffffff' /> : <span>Register</span>}
           </Button>
         </form>
       </Form>

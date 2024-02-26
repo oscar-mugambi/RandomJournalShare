@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
 
-const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
+const LayoutHeader = ({
+  handleLogout,
+  isPending,
+}: {
+  handleLogout: () => void;
+  isPending: boolean;
+}) => {
   return (
     <nav className='bg-gray-800'>
       <div className='px-10'>
@@ -26,12 +33,6 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
                 >
                   My Entries
                 </Link>
-                <Link
-                  to='/home/journal/random-entry'
-                  className='px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700 transition duration-150 ease-in-out'
-                >
-                  Random Entry
-                </Link>
               </div>
             </div>
           </div>
@@ -40,7 +41,7 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
               onClick={handleLogout}
               className='ml-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:border-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out'
             >
-              Logout
+              {isPending ? <BeatLoader size={8} color='white' /> : 'Logout'}
             </button>
           </div>
         </div>

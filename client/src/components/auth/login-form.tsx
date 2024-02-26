@@ -20,6 +20,7 @@ import { useLogin } from '@/hooks/useLogin';
 import { setToken } from '@/redux/authSlice';
 import { setUser } from '@/redux/userSlice';
 import { useAppDispatch } from '@/app/store';
+import { BeatLoader } from 'react-spinners';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -109,7 +110,7 @@ export const LoginForm = () => {
           </fieldset>
           <FormError message={loginError?.message} />
           <Button disabled={isLoginInProgress} type='submit' className='w-full'>
-            Sign In
+            {isLoginInProgress ? <BeatLoader size={8} color='#ffffff' /> : <span>Sign in</span>}
           </Button>
         </form>
       </Form>

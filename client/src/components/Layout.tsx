@@ -10,7 +10,7 @@ const Layout = () => {
   const userId = useAppSelector((state) => state.user.user?.user_id);
   const token = useAppSelector((state) => state.auth.token);
 
-  const { mutate: performLogout, isSuccess, error } = useLogout();
+  const { mutate: performLogout, isSuccess, error, isPending } = useLogout();
 
   const handleLogout = async () => {
     performLogout({
@@ -31,7 +31,7 @@ const Layout = () => {
 
   return (
     <div className='h-full'>
-      <LayoutHeader handleLogout={handleLogout} />
+      <LayoutHeader handleLogout={handleLogout} isPending={isPending} />
       <Outlet />
     </div>
   );

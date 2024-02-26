@@ -10,6 +10,7 @@ import { useAppSelector } from '@/app/store';
 import { useCreateJournalEntry } from '@/hooks/useLogJournal';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
+import { BeatLoader } from 'react-spinners';
 
 const JournalEntry = () => {
   const userId = useAppSelector((state) => state.user.user?.user_id);
@@ -71,9 +72,6 @@ const JournalEntry = () => {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                {form.formState.errors?.title && (
-                  <p className='text-red-500 text-sm'>{form.formState?.errors?.title?.message}</p>
-                )}
               </FormItem>
             )}
           />
@@ -83,9 +81,7 @@ const JournalEntry = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Content</FormLabel>
-                {form.formState.errors?.content && (
-                  <p className='text-red-500 text-sm'>{form.formState?.errors?.content?.message}</p>
-                )}
+
                 <FormControl>
                   <TipTap description={field.value} onChange={field.onChange} />
                 </FormControl>
@@ -117,7 +113,7 @@ const JournalEntry = () => {
             )}
           />
           <Button className='w-fit' type='submit'>
-            Submit
+            {isPending ? <BeatLoader size={8} color='#ffffff' /> : <span>Submit</span>}
           </Button>
         </form>
       </Form>

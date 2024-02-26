@@ -3,6 +3,7 @@ CREATE DATABASE random_journal;
 
 
 CREATE TABLE users (
+  username varchar(255) NOT NULL,
   user_id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
@@ -20,7 +21,7 @@ CREATE TABLE journal_entries (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   title VARCHAR(255),
   mood TEXT,
-  tags TEXT[],
+  tags TEXT,
   daily_highlight TEXT,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -34,7 +35,7 @@ CREATE TABLE shared_journal_entries (
   sender_entry_id INT NOT NULL,
   receiver_user_id INT NOT NULL,
   shared_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  delivery_status VARCHAR(255) NOT NULL DEFAULT 'pending'
+  delivery_status VARCHAR(255) NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   CHECK (delivery_status IN ('pending', 'success', 'failed')),
   FOREIGN KEY (sender_entry_id) REFERENCES journal_entries(entry_id) ON DELETE CASCADE,
