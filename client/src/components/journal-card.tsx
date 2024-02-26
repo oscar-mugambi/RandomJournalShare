@@ -41,7 +41,7 @@ const JournalCard = ({ journal }: { journal: JournalEntry }) => {
   }
 
   return (
-    <Card>
+    <Card className='min-h-fit'>
       <CardHeader className='flex-row gap-4 items-center'>
         <div>
           <CardTitle className='mb-1'>{journal.title}</CardTitle>

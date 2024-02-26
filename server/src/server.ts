@@ -33,9 +33,13 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/journals', journalRoutes);
+app.get('/api/health-check', (_req: Request, res: Response) => {
+  return res.status(200).send('OK');
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/journals', journalRoutes);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);

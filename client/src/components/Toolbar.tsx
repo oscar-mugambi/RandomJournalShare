@@ -1,5 +1,5 @@
 import { type Editor } from '@tiptap/react';
-import { Bold, Italic, Heading2 } from 'lucide-react';
+import { Bold, Italic, Code } from 'lucide-react';
 
 import { Toggle } from '@/components/ui/toggle';
 
@@ -15,10 +15,10 @@ const Toolbar = ({ editor }: ToolbarProps) => {
     <div className='border border-input bg-transparent rounded-br-sm'>
       <Toggle
         size='sm'
-        pressed={editor?.isActive('heading')}
-        onPressedChange={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+        pressed={editor?.isActive('code')}
+        onPressedChange={() => editor.chain().focus().toggleCode().run()}
       >
-        <Heading2 className='w-4 h-4' />
+        <Code className='w-4 h-4' />
       </Toggle>
       <Toggle
         size='sm'

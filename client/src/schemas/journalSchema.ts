@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const journalEntrySchema = z.object({
-  content: z.string().max(500, 'Content must not exceed 500 characters').trim(),
-  title: z.string().max(255, 'Title must not exceed 255 characters').trim(),
+  content: z.string().trim().max(500, { message: 'Field must not exceed 500 characters' }),
+  title: z.string().max(50, 'Title must not exceed 50 characters').trim(),
   mood: z.string().optional(),
   tags: z.string().optional(),
 });

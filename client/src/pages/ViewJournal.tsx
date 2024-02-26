@@ -40,7 +40,7 @@ const JournalPage = () => {
   }
 
   return (
-    <div className='p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>
+    <div className='min-h-screen p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>
       <h1 className='text-4xl font-bold text-white text-center my-10 drop-shadow-lg'>
         Journal Entry
       </h1>
