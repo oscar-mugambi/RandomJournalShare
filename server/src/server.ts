@@ -34,6 +34,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/health-check', (_req: Request, res: Response) => {
+  console.log('health-check');
   return res.status(200).send('OK');
 });
 
