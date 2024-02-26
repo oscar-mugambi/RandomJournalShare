@@ -60,25 +60,30 @@ export async function dispatchPendingEmails() {
   const { rows } = await db.query(fetchPendingEntriesSQL);
 
   for (let entry of rows) {
-    try {
-      const { error } = await resend.emails.send({
-        from: 'Random Journal <onboarding@resend.dev>',
-        to: entry.email,
-        subject: `Random Journal Entry: ${entry.title}`,
-        html: entry.content,
-      });
+    const { error } = await resend.emails.send({
+      from: 'Journal Random <onboarding@code.cosmicpenguin.xyz>',
+      to: entry.email,
+      subject: `Random Journal Entry: ${entry.title}`,
+      html: entry.content,
+    });
 
-      if (error) {
-        console.log(error);
-        logActivity(
-          `Ann error occurred while sending email: \t ${error.message} \t  ${error.name}`,
-          'mailLog.log'
-        );
-      }
-
+    if (error) {
+      console.log(error);
+      logActivity(
+        `An error occurred while sending email: \t ${error.message} \t  ${error.name}`,
+        'mailLog.log'
+      );
+      const updateFailedStatusSQL = `
+          UPDATE shared_journal_entries
+          SET delivery_status = 'failed'
+          WHERE shared_entry_id = $1;
+          `;
+      await db.query(updateFailedStatusSQL, [entry.shared_entry_id]);
+      continue;
+    } else {
       const updateStatusSQL = `
-      UPDATE shared_journal_entries
-      SET delivery_status = 'success'
+        UPDATE shared_journal_entries
+        SET delivery_status = 'success'
       WHERE shared_entry_id = $1;
       `;
       await db.query(updateStatusSQL, [entry.shared_entry_id]);
@@ -90,18 +95,6 @@ export async function dispatchPendingEmails() {
       console.log(
         `Email successfully sent to ${entry.email} for shared_entry_id: ${entry.shared_entry_id}`
       );
-    } catch (error) {
-      console.error(`Failed to send email for shared_entry_id: ${entry.shared_entry_id}`, error);
-      logActivity(
-        `Failed to send email for shared_entry_id: ${entry.shared_entry_id}`,
-        'mailLog.log'
-      );
-      const updateFailedStatusSQL = `
-        UPDATE shared_journal_entries
-        SET delivery_status = 'failed'
-        WHERE shared_entry_id = $1;
-        `;
-      await db.query(updateFailedStatusSQL, [entry.shared_entry_id]);
     }
   }
 }

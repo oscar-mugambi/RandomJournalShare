@@ -57,3 +57,21 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+/**
+ * Left this here for testing purposes
+ */
+// import { Resend } from 'resend';
+// import { dispatchPendingEmails, registerPendingJournalEmails } from './db/journalSharing';
+
+// const resend = new Resend(process.env.RESEND_API_KEY);
+// app.get('/resend', async (_req: Request, res: Response) => {
+//   const { error, data } = await resend.emails.send({
+//     from: 'Journal Random: <onboarding@code.cosmicpenguin.xyz>',
+//     to: 'oscar.mugambi@ajua.com',
+//     subject: `Random Journal Entry`,
+//     html: '<span>entry.content<span>',
+//   });
+
+//   return res.json({ error, data });
+// });

@@ -30,6 +30,7 @@ CREATE TABLE journal_entries (
 
 
 
+
 CREATE TABLE shared_journal_entries (
   shared_entry_id SERIAL PRIMARY KEY,
   sender_entry_id INT NOT NULL,
