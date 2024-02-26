@@ -32,7 +32,8 @@ export async function logoutUser(endpoint: string, user_id: number, token?: stri
       token
     );
 
-    // check if there is a response // temp hack to fix bug
+    // check if there is a response
+    // temp hack to fix cookie related bug in development
     const text = await response.text();
     let data;
     if (text) {
@@ -51,11 +52,8 @@ export async function registerUser(
   url: string,
   requestBody: { username: string; email: string; password: string }
 ) {
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(requestBody),
   });
 

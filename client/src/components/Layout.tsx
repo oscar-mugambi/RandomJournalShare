@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import LayoutHeader from './LayoutHeader';
 import { logout } from '@/redux/authSlice';
 import { useLogout } from '@/hooks/useLogin';
@@ -7,22 +7,15 @@ import { deleteUser } from '@/redux/userSlice';
 
 const Layout = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const userId = useAppSelector((state) => state.user.user?.user_id);
-  const token = useAppSelector((state) => state.auth?.token);
+  const token = useAppSelector((state) => state.auth.token);
 
   const { mutate: performLogout, isSuccess, error } = useLogout();
 
   const handleLogout = async () => {
-    if (!userId || !token) {
-      console.log('User ID not found');
-      navigate('/auth/login');
-      return;
-    }
-
     performLogout({
       url: '/auth/logout',
-      user_id: userId,
+      user_id: userId!,
       token,
     });
   };
@@ -37,12 +30,10 @@ const Layout = () => {
   }
 
   return (
-    <>
+    <div className='h-full'>
       <LayoutHeader handleLogout={handleLogout} />
-      <div className='h-full'>
-        <Outlet />
-      </div>
-    </>
+      <Outlet />
+    </div>
   );
 };
 

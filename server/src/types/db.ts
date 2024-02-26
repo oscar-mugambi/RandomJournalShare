@@ -12,3 +12,15 @@ export interface UserExists {
   username: string;
   email: string;
 }
+
+export type GetAllUserDataType = {
+  email: string;
+  username: string;
+};
+
+export type CreateNewUser = {
+  username: string;
+  email: string;
+  password?: string;
+  user_id: string;
+};

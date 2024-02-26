@@ -1,5 +1,6 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { loginUser, registerUser, logoutUser } from '@/api/authService';
+import { toast } from '@/components/ui/use-toast';
 
 interface LoginRequestBody {
   email: string;
@@ -30,6 +31,10 @@ export function useLogin(): UseMutationResult<any, Error, LoginMutationVariables
     mutationFn: ({ url, requestBody }: LoginMutationVariables) => loginUser(url, requestBody),
     onSuccess: (data) => {
       console.log(data);
+      toast({
+        title: 'Welcome!',
+        description: 'You have successfully logged in. Happy journaling!',
+      });
     },
     onError: (error: Error) => {
       console.error('Login failed:', error);
@@ -42,6 +47,10 @@ export function useLogout(): UseMutationResult<any, Error, LogoutMutationVariabl
       logoutUser(url, user_id, token),
     onSuccess: (data) => {
       console.log(data);
+      toast({
+        title: 'Hope to see you back!',
+        description: 'You have been logged out. We hope to see you back soon!',
+      });
     },
     onError: (error: Error) => {
       console.error('Login failed:', error);
@@ -54,6 +63,10 @@ export function useRegistration(): UseMutationResult<any, Error, RegistrationMut
       registerUser(url, requestBody),
     onSuccess: (data) => {
       console.log('Login successful:', data);
+      toast({
+        title: 'Registration Successful!',
+        description: 'Welcome to the community! Your journey begins now.',
+      });
     },
     onError: (error: Error) => {
       console.error('Login failed:', error);

@@ -35,7 +35,7 @@ export const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: 'imperator.furiosa@mail.com',
+      email: 'furiosa@mail.com',
       password: '11111',
     },
   });
@@ -55,7 +55,7 @@ export const LoginForm = () => {
 
     setTimeout(() => {
       navigate('/home/');
-    }, 500);
+    });
   }
 
   return (

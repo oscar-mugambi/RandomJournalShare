@@ -1,4 +1,5 @@
 import { createJournalEntry } from '@/api/journalService';
+import { toast } from '@/components/ui/use-toast';
 import { JournalEntryMutationVariables } from '@/schemas/journalSchema';
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
 
@@ -14,6 +15,10 @@ export function useCreateJournalEntry(): UseMutationResult<
     onSuccess: (data) => {
       console.log('Operation successful:', data);
       queryClient.invalidateQueries(['journals']);
+      toast({
+        title: 'Journal Submitted!',
+        description: 'Your entry has been saved!',
+      });
     },
     onError: (error: Error) => {
       console.error('Operation failed:', error);

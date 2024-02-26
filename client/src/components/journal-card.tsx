@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { Button } from './ui/button';
 import { useAppSelector } from '@/app/store';
 import { useDeleteJournal } from '@/hooks/useDeleteJournal';
 import { formatter } from '@/lib/utils';
+import { toast } from './ui/use-toast';
 
 const JournalCard = ({ journal }: { journal: JournalEntry }) => {
   const navigate = useNavigate();
@@ -27,9 +28,10 @@ const JournalCard = ({ journal }: { journal: JournalEntry }) => {
   };
 
   if (isSuccess) {
-    /**
-     * TODO handle success
-     */
+    toast({
+      title: 'Journal Deleted',
+      description: `${journal.title} was successfully deleted.`,
+    });
   }
 
   if (isError) {

@@ -42,7 +42,7 @@ export const RegisterForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    const url = 'http://localhost:5000/auth/register';
+    const url = '/auth/register';
 
     performRegister({
       url,

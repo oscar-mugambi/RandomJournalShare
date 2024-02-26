@@ -26,15 +26,17 @@ const Welcome = () => {
           ))}
         </div>
       ) : (
-        <div className='flex flex-col items-center justify-center text-center text-white space-y-4 w-full px-4'>
-          <h2 className='text-4xl font-bold drop-shadow-md'>No Journals Yet</h2>
-          <p className='text-xl'>Your personal journal awaits your first entry.</p>
-          <button
-            onClick={() => navigate('/home/journals/new')}
-            className='mt-4 bg-white text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-100 transition duration-200'
-          >
-            Create Your Journal
-          </button>
+        <div className='mt-52'>
+          <div className='flex flex-col items-center justify-center text-center text-white space-y-4 w-full px-4'>
+            <h2 className='text-4xl font-bold drop-shadow-md'>No Journals Yet</h2>
+            <p className='text-xl'>Your personal journal awaits your first entry.</p>
+            <button
+              onClick={() => navigate('/home/journals/new')}
+              className='mt-4 bg-white text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-100 transition duration-200'
+            >
+              Start Journaling
+            </button>
+          </div>
         </div>
       )}
     </div>

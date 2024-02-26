@@ -4,7 +4,7 @@ import { logActivity } from './logger';
 
 export const loginLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 5,
+  max: 30,
   message: 'Too many login attempts, please try again later.',
   handler: (req: Request, res: Response, _next: Function, options: any) => {
     logActivity(

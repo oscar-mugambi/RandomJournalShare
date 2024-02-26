@@ -7,7 +7,7 @@ const LayoutHeader = ({ handleLogout }: { handleLogout: () => void }) => {
         <div className='flex items-center justify-between h-16'>
           <div className='flex items-center'>
             <Link
-              to='/home/journals/random'
+              to='/home'
               className='text-2xl font-bold text-white hover:text-gray-300 transition duration-150 ease-in-out'
             >
               Random Journal

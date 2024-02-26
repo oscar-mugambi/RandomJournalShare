@@ -4,7 +4,7 @@ import { formatter } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
-const JournalPage = () => {
+const RandomJournal = () => {
   const token = useAppSelector((state) => state.auth?.token);
   async function fetchJournal() {
     const response = await customFetch(
@@ -27,7 +27,6 @@ const JournalPage = () => {
       return data.data;
     },
   });
-
   if (!journal?.entry_id) {
     return <div>No journals</div>;
   }
@@ -71,4 +70,4 @@ const JournalPage = () => {
   );
 };
 
-export default JournalPage;
+export default RandomJournal;
