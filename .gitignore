@@ -26,8 +26,7 @@ yarn-error.log
 *.tsbuildinfo
 
 # Vite generated client files
-/client/.vite/
-/client/vite.config.ts
+
 
 # Environment variables
 .env
