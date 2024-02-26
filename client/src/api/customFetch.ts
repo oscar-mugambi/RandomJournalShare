@@ -4,8 +4,25 @@ interface CustomFetchOptions {
   body?: string;
   credentials?: 'include' | 'omit' | 'same-origin';
 }
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://cosmicpenguin.xyz/api/jumba:5000'
+    : 'http://localhost:5000';
 
-export function customFetch(endpoint: string, options: CustomFetchOptions = {}, token?: string) {
+async function refreshToken() {
+  const response = await fetch(`${BASE_URL}/auth/refresh`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  const data = await response.json();
+  return data.accessToken;
+}
+
+export async function customFetch(
+  endpoint: string,
+  options: CustomFetchOptions = {},
+  token?: string
+) {
   const defaultHeaders = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -19,9 +36,25 @@ export function customFetch(endpoint: string, options: CustomFetchOptions = {}, 
     },
   };
 
-  const BASE_URL =
-    process.env.NODE_ENV === 'production' ? 'https://cosmicpenguin.xyz' : 'http://localhost:5000';
   const url = `${BASE_URL}${endpoint}`;
 
-  return fetch(url, config);
+  let response = await fetch(url, config);
+
+  if (response.status === 403) {
+    const accessToken = await refreshToken();
+    if (accessToken) {
+      const newConfig = {
+        ...config,
+        headers: {
+          ...defaultHeaders,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      response = await fetch(url, newConfig);
+    } else {
+      window.location.href = '/auth/login';
+    }
+  }
+
+  return response;
 }
