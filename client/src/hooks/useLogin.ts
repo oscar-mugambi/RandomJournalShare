@@ -29,8 +29,7 @@ interface LogoutMutationVariables {
 export function useLogin(): UseMutationResult<any, Error, LoginMutationVariables> {
   return useMutation({
     mutationFn: ({ url, requestBody }: LoginMutationVariables) => loginUser(url, requestBody),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       toast({
         title: 'Welcome!',
         description: 'You have successfully logged in. Happy journaling!',
@@ -45,8 +44,7 @@ export function useLogout(): UseMutationResult<any, Error, LogoutMutationVariabl
   return useMutation({
     mutationFn: ({ url, user_id, token }: LogoutMutationVariables) =>
       logoutUser(url, user_id, token),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       toast({
         title: 'Hope to see you back!',
         description: 'You have been logged out. We hope to see you back soon!',
@@ -61,8 +59,7 @@ export function useRegistration(): UseMutationResult<any, Error, RegistrationMut
   return useMutation({
     mutationFn: ({ url, requestBody }: RegistrationMutationVariables) =>
       registerUser(url, requestBody),
-    onSuccess: (data) => {
-      console.log('Login successful:', data);
+    onSuccess: () => {
       toast({
         title: 'Registration Successful!',
         description: 'Welcome to the community! Your journey begins now.',

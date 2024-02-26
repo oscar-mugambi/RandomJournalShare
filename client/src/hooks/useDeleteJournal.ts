@@ -12,8 +12,8 @@ export function useDeleteJournal(): UseMutationResult<any, Error, DeleteRequestB
   return useMutation({
     mutationFn: ({ url, journalId, token }: DeleteRequestBody) =>
       deleteJournal(url, journalId, token),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['journals']);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['journals'] });
     },
     onError: (error: Error) => {
       console.error('Deletion failed:', error);

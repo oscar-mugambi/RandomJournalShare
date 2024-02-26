@@ -12,9 +12,8 @@ export function useCreateJournalEntry(): UseMutationResult<
   return useMutation({
     mutationFn: ({ url, token, data, user_id }) =>
       createJournalEntry({ url, token, data, user_id }),
-    onSuccess: (data) => {
-      console.log('Operation successful:', data);
-      queryClient.invalidateQueries(['journals']);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['journals'] });
       toast({
         title: 'Journal Submitted!',
         description: 'Your entry has been saved!',
