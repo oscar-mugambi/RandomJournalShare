@@ -1,21 +1,13 @@
 import { QueryResult } from 'pg';
-import { query as db } from './db';
-import cron from 'node-schedule';
-import { logActivity } from './middleware/logger';
+import { query as db } from './';
+import { logActivity } from '../middleware/logger';
 import { Resend } from 'resend';
-
 const resend = new Resend(process.env.RESEND_API_KEY);
-
 type JournalEntry = {
   entry_id: number;
   user_id: number;
 };
 
-/*
- Shuffle the array using the Fisher-Yates shuffle algorithm, which is an efficient
- way to randomly rearrange an array in O(n) time complexity.
- Details can be found here: https://javascript.info/task/shuffle
-*/
 function shuffle(array: JournalEntry[]) {
   for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -56,7 +48,7 @@ export async function registerPendingJournalEmails() {
   console.log('Journals are ready to be shared');
 }
 
-async function dispatchPendingEmails() {
+export async function dispatchPendingEmails() {
   const fetchPendingEntriesSQL = `SELECT sje.shared_entry_id, sje.sender_entry_id, sje.receiver_user_id, je.content, je.title, u.email
   FROM shared_journal_entries sje
   JOIN journal_entries je ON sje.sender_entry_id = je.entry_id
@@ -69,12 +61,20 @@ async function dispatchPendingEmails() {
 
   for (let entry of rows) {
     try {
-      await resend.emails.send({
-        from: 'onboarding@resend.dev',
+      const { error } = await resend.emails.send({
+        from: 'Random Journal <onboarding@resend.dev>',
         to: entry.email,
         subject: `Random Journal Entry: ${entry.title}`,
         html: entry.content,
       });
+
+      if (error) {
+        console.log(error);
+        logActivity(
+          `Ann error occurred while sending email: \t ${error.message} \t  ${error.name}`,
+          'mailLog.log'
+        );
+      }
 
       const updateStatusSQL = `
       UPDATE shared_journal_entries
@@ -105,15 +105,3 @@ async function dispatchPendingEmails() {
     }
   }
 }
-
-cron.scheduleJob('0 12 * * *', () => {
-  logActivity('Scheduled task sendEmailsForSharedJournals started', 'mailLog.log');
-  console.log('Scheduled task sendEmailsForSharedJournals started');
-  dispatchPendingEmails();
-});
-
-cron.scheduleJob('57 11 * * *', () => {
-  logActivity('Scheduled task shareJournals started', 'mailLog.log');
-  console.log('Scheduled task shareJournals started');
-  registerPendingJournalEmails();
-});

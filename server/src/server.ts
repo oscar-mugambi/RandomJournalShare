@@ -10,6 +10,7 @@ import { corsOptions } from './config/corsOptions';
 import userRoutes from './routes/userRoutes';
 import journalRoutes from './routes/journalRoutes';
 import authRoutes from './routes/authRoutes';
+import { cronJobSendSharedJournalEmails, cronJobPrepareJournalsForSharing } from './cron-jobs';
 
 dotenv.config();
 
@@ -19,6 +20,9 @@ if (!PORT) {
   console.error('Port is not defined. Make sure PORT is set in .env');
   process.exit(1);
 }
+
+cronJobSendSharedJournalEmails();
+cronJobPrepareJournalsForSharing();
 
 const app: express.Express = express();
 
