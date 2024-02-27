@@ -1,8 +1,6 @@
 
 # Random Journal
 
-# Project Name
-
 Random Journal is a journaling app that connects users through shared experiences. Write a journal entry to receive one from another user.
 
 
