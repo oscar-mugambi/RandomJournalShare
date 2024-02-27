@@ -3,7 +3,7 @@ CREATE DATABASE random_journal;
 
 
 CREATE TABLE users (
-  username varchar(255) NOT NULL,
+  username varchar(255) NOT NULL UNIQUE,
   user_id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE journal_entries (
   content TEXT NOT NULL CHECK (char_length(content) <= 500),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  title VARCHAR(255),
+  title VARCHAR(255) NOT NULL,
   mood TEXT,
   tags TEXT,
   daily_highlight TEXT,
