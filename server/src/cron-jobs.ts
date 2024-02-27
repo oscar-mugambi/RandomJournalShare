@@ -19,7 +19,7 @@ export const cronJobSendSharedJournalEmails = () => {
 
 export const cronJobPrepareJournalsForSharing = () => {
   cron.schedule(
-    '57 11 * * *',
+    '59 11 * * *',
     async () => {
       logActivity('Scheduled task shareJournals started', 'mailLog.log');
       console.log('Scheduled task shareJournals started');
