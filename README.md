@@ -21,13 +21,17 @@ To set up the project, follow these steps:
 ### Clone the repository
 
 ```bash
-git@github.com:oscar-mugambi/RandomJournalShare.git
+git clone git@github.com:oscar-mugambi/RandomJournalShare.git
 cd RandomJournalShare
 ```
 
 ### Install dependencies in both client and server directories
 
 ```bash
+cd server
+yarn install
+
+cd client
 yarn install
 ```
 
